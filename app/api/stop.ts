@@ -60,6 +60,14 @@ function formatDate(date = new Date()) {
 
 export const getStopTimes = async (stop: string): Promise<IStopTimes> => {
   const currentDate = new Date();
+  console.log("Current date: ", formatDate(currentDate));
+  console.log(
+    "Current time: ",
+    new Intl.DateTimeFormat("it-IT", {
+      hour: "numeric",
+      minute: "numeric",
+    }).format(currentDate) + ":00"
+  );
   const response = await axiosInstance.get(
     "/it/pthv/get/stop-stoptimes-discovery",
     {
