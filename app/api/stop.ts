@@ -9,10 +9,10 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 interface IStopTimes {
-  infos: {
+  infos?: {
     results_date_time: string;
   };
-  items: {
+  items?: {
     [key: string]: {
       ShortName: string;
       LongName: string;
@@ -74,11 +74,11 @@ export const getStopTimes = async (stop: string): Promise<IStopTimes> => {
 };
 
 export interface IRouteInfo {
-  timestamp: string;
-  directions: {
+  timestamp?: string;
+  directions?: {
     direction: string;
     display: string;
-    stopPoints: {
+    stopPoints?: {
       id: string;
       type: string;
       name: string;
@@ -86,12 +86,21 @@ export interface IRouteInfo {
   }[];
 }
 
-export const getRouteInfo = async (routeId: string): Promise<IRouteInfo> => {
-  const response = await axios.get(
-    `/InstantCore/v3/networks/97/lines/AUTOLINEE:${routeId}/directions?stopPoints=false`,
-    {
-      baseURL: process.env.AT_MOBILE_BASENAME,
-    }
-  );
-  return response.data;
+export const getRouteInfo = async (
+  routeId: string
+): Promise<IRouteInfo | undefined> => {
+  try {
+    const response = await axios.get(
+      `/InstantCore/v3/networks/97/lines/AUTOLINEE:${routeId}/directions?stopPoints=false`,
+      {
+        baseURL: process.env.AT_MOBILE_BASENAME,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    // IGNORE
+    console.log(error);
+  }
+
+  return undefined;
 };

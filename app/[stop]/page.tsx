@@ -9,25 +9,37 @@ interface IProps {
 export default async function StopPage({ params: { stop } }: IProps) {
   const stopTimes = await getStopTimes(stop);
 
-  const routeId = Object.values(stopTimes.items)[0].RouteId;
+  if (!stopTimes.items || Object.values(stopTimes.items).length === 0) {
+    return (
+      <div className="p-4">
+        <h1 className="text-2xl font-bold text-center">Fermata non trovata</h1>
+      </div>
+    );
+  }
+
+  const routeId = Object.values(stopTimes.items)[0]?.RouteId;
   const routeInfo = await getRouteInfo(routeId);
 
   let stopName = "";
-  for (const dir of routeInfo.directions) {
-    for (const sp of dir.stopPoints) {
-      if (sp.id === `AUTOLINEE:${stop}`) {
-        stopName = sp.name;
-        break;
+  if (!!routeInfo?.directions) {
+    for (const dir of routeInfo?.directions) {
+      if (!dir.stopPoints) continue;
+
+      for (const sp of dir.stopPoints) {
+        if (sp.id === `AUTOLINEE:${stop}`) {
+          stopName = sp.name;
+          break;
+        }
       }
     }
   }
 
   return (
-    <div className="flex flex-col gap-4 p-2">
+    <div className="flex flex-col gap-4 p-4">
       <h1 className="text-xl font-bold text-center">
-        Fermata: {stopName}
+        Fermata: {stopName || stop}
         <br />
-        Ultimo aggiornamento: {stopTimes.infos.results_date_time}
+        Ultimo aggiornamento: {stopTimes?.infos?.results_date_time}
       </h1>
       <table className="w-full text-left border dark:border-gray-500 border-gray-200 rounded-2xl overflow-hidden">
         <thead>
