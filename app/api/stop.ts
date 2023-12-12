@@ -1,8 +1,12 @@
 import dayjs from "dayjs";
 import axiosInstance from ".";
 import it from "dayjs/locale/it";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 dayjs.locale(it);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface IStopTimes {
   infos: {
@@ -63,9 +67,9 @@ function formatDate(date = new Date()) {
 }
 
 export const getStopTimes = async (stop: string): Promise<IStopTimes> => {
-  const currentDate = dayjs();
-  console.log("Current date: ", dayjs().format("YYYY/MM/DD"));
-  console.log("Current time: ", dayjs().format("HH:mm:ss"));
+  const currentDate = dayjs().tz("Europe/Rome");
+  console.log("Current date: ", dayjs().tz("Europe/Rome").format("YYYY/MM/DD"));
+  console.log("Current time: ", dayjs().tz("Europe/Rome").format("HH:mm:ss"));
   const response = await axiosInstance.get(
     "/it/pthv/get/stop-stoptimes-discovery",
     {
