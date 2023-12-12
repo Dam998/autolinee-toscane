@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
-import axiosInstance from ".";
 import it from "dayjs/locale/it";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import axios from "axios";
 
 dayjs.locale(it);
 dayjs.extend(utc);
@@ -56,32 +56,41 @@ interface IStopTimes {
   };
 }
 
-function formatDate(date = new Date()) {
-  const year = date.toLocaleString("it-IT", { year: "numeric" });
-  const month = date.toLocaleString("it-IT", {
-    month: "2-digit",
-  });
-  const day = date.toLocaleString("it-IT", { day: "2-digit" });
-
-  return [year, month, day].join("-");
-}
-
 export const getStopTimes = async (stop: string): Promise<IStopTimes> => {
   const currentDate = dayjs().tz("Europe/Rome");
-  console.log("Current date: ", dayjs().tz("Europe/Rome").format("YYYY/MM/DD"));
-  console.log("Current time: ", dayjs().tz("Europe/Rome").format("HH:mm:ss"));
-  const response = await axiosInstance.get(
-    "/it/pthv/get/stop-stoptimes-discovery",
+  const response = await axios.get("/it/pthv/get/stop-stoptimes-discovery", {
+    baseURL: process.env.AT_BASENAME,
+    params: {
+      nbtimes: 2,
+      stop,
+      reseau: "",
+      date: currentDate.format("YYYY-MM-DD"),
+      heure: currentDate.format("HH:mm:ss"),
+      nbpasttimes: 0,
+      pastsince: 480,
+    },
+  });
+  return response.data;
+};
+
+export interface IRouteInfo {
+  timestamp: string;
+  directions: {
+    direction: string;
+    display: string;
+    stopPoints: {
+      id: string;
+      type: string;
+      name: string;
+    }[];
+  }[];
+}
+
+export const getRouteInfo = async (routeId: string): Promise<IRouteInfo> => {
+  const response = await axios.get(
+    `/InstantCore/v3/networks/97/lines/AUTOLINEE:${routeId}/directions?stopPoints=false`,
     {
-      params: {
-        nbtimes: 2,
-        stop,
-        reseau: "",
-        date: currentDate.format("YYYY-MM-DD"),
-        heure: currentDate.format("HH:mm:ss"),
-        nbpasttimes: 0,
-        pastsince: 480,
-      },
+      baseURL: process.env.AT_MOBILE_BASENAME,
     }
   );
   return response.data;
