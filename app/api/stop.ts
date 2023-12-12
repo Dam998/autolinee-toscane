@@ -49,11 +49,11 @@ interface IStopTimes {
 }
 
 function formatDate(date = new Date()) {
-  const year = date.toLocaleString("default", { year: "numeric" });
-  const month = date.toLocaleString("default", {
+  const year = date.toLocaleString("it-IT", { year: "numeric" });
+  const month = date.toLocaleString("it-IT", {
     month: "2-digit",
   });
-  const day = date.toLocaleString("default", { day: "2-digit" });
+  const day = date.toLocaleString("it-IT", { day: "2-digit" });
 
   return [year, month, day].join("-");
 }
@@ -63,10 +63,11 @@ export const getStopTimes = async (stop: string): Promise<IStopTimes> => {
   console.log("Current date: ", formatDate(currentDate));
   console.log(
     "Current time: ",
-    new Intl.DateTimeFormat("it-IT", {
-      hour: "numeric",
-      minute: "numeric",
-    }).format(currentDate) + ":00"
+    currentDate.toLocaleString("it-IT", {
+      minute: "2-digit",
+      hour: "2-digit",
+      second: "2-digit",
+    })
   );
   const response = await axiosInstance.get(
     "/it/pthv/get/stop-stoptimes-discovery",
@@ -76,11 +77,11 @@ export const getStopTimes = async (stop: string): Promise<IStopTimes> => {
         stop,
         reseau: "",
         date: formatDate(currentDate),
-        heure:
-          new Intl.DateTimeFormat("it-IT", {
-            hour: "numeric",
-            minute: "numeric",
-          }).format(currentDate) + ":00",
+        heure: currentDate.toLocaleString("it-IT", {
+          minute: "2-digit",
+          hour: "2-digit",
+          second: "2-digit",
+        }),
         nbpasttimes: 0,
         pastsince: 480,
       },
