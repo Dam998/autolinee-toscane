@@ -1,4 +1,8 @@
+import dayjs from "dayjs";
 import axiosInstance from ".";
+import it from "dayjs/locale/it";
+
+dayjs.locale(it);
 
 interface IStopTimes {
   infos: {
@@ -59,16 +63,9 @@ function formatDate(date = new Date()) {
 }
 
 export const getStopTimes = async (stop: string): Promise<IStopTimes> => {
-  const currentDate = new Date();
-  console.log("Current date: ", formatDate(currentDate));
-  console.log(
-    "Current time: ",
-    currentDate.toLocaleString("it-IT", {
-      minute: "2-digit",
-      hour: "2-digit",
-      second: "2-digit",
-    })
-  );
+  const currentDate = dayjs();
+  console.log("Current date: ", dayjs().format("YYYY/MM/DD"));
+  console.log("Current time: ", dayjs().format("HH:mm:ss"));
   const response = await axiosInstance.get(
     "/it/pthv/get/stop-stoptimes-discovery",
     {
@@ -76,12 +73,8 @@ export const getStopTimes = async (stop: string): Promise<IStopTimes> => {
         nbtimes: 2,
         stop,
         reseau: "",
-        date: formatDate(currentDate),
-        heure: currentDate.toLocaleString("it-IT", {
-          minute: "2-digit",
-          hour: "2-digit",
-          second: "2-digit",
-        }),
+        date: currentDate.format("YYYY-MM-DD"),
+        heure: currentDate.format("HH:mm:ss"),
         nbpasttimes: 0,
         pastsince: 480,
       },
