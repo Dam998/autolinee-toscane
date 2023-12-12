@@ -8,7 +8,7 @@ interface IProps {
 
 export default async function StopPage({ params: { stop } }: IProps) {
   const stopTimes = await getStopTimes(stop);
-  console.log(stopTimes);
+  console.log(stopTimes.items);
   return (
     <div className="flex flex-col gap-4 p-2">
       <h1 className="text-xl">
@@ -27,10 +27,10 @@ export default async function StopPage({ params: { stop } }: IProps) {
         <tbody className="bg-black-dark">
           {Object.values(stopTimes.items).map(({ ShortName, Schedule }) => {
             if (Schedule.length === 0) return null;
-
-            const { to_stop_name } = Schedule[0];
+            console.log("Schedule", Schedule);
 
             if (!Schedule.some(({ realTime }) => realTime)) return null;
+            const { to_stop_name } = Schedule[0];
 
             return (
               <tr
