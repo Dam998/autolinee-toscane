@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getRouteInfo, getStopTimes } from "../api/stop";
+import dayjs from "dayjs";
 
 interface IProps {
   params: {
@@ -42,7 +43,7 @@ export default async function StopPage({ params: { stop } }: IProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-xl font-bold text-center">
+      <h1 className="text-xl font-bold text-center sm:text-left">
         Fermata: {stopName || stop}
         <br />
         Ultimo aggiornamento: {stopTimes?.infos?.results_date_time}
@@ -71,9 +72,10 @@ export default async function StopPage({ params: { stop } }: IProps) {
                 <td className="py-3 ps-5 font-bold">
                   <div className="flex flex-col">
                     {Schedule.map(({ realTime, ArrTime }) => {
+                      console.log(ArrTime);
                       return (
                         <div key={realTime || ArrTime}>
-                          {realTime || ArrTime}
+                          {realTime || ArrTime.split(" ")[1]}
                         </div>
                       );
                     })}
