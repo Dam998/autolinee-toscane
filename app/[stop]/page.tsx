@@ -128,7 +128,35 @@ export default async function StopPage({ params: { stop } }: IProps) {
               >
                 <td className="py-3 sm:ps-5 ps-3 font-bold">{name}</td>
                 <td className="sm:ps-5 ps-3 font-bold" colSpan={2}>
-                  <table className="w-full">
+                  {destinations.map(({ name: destName, times }) => {
+                    return (
+                      <div
+                        key={destName}
+                        className="flex justify-between items-center gap-2 border-b-2 last:border-none dark:border-gray-500 border-gray-200"
+                      >
+                        <div className="py-2">
+                          <span>{destName}</span>
+                        </div>
+                        <div className="flex flex-col items-end py-2 sm:pe-5 pe-3">
+                          {times.map(({ realTime, time }) => {
+                            return (
+                              <span
+                                key={time}
+                                className={
+                                  realTime
+                                    ? "dark:text-green-400 text-green-600 whitespace-nowrap"
+                                    : ""
+                                }
+                              >
+                                {formatDepartureTime(time)}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {/* <table className="w-full">
                     <tbody>
                       {destinations.map(({ name: destName, times }) => {
                         return (
@@ -157,7 +185,7 @@ export default async function StopPage({ params: { stop } }: IProps) {
                         );
                       })}
                     </tbody>
-                  </table>
+                  </table> */}
                 </td>
               </tr>
             );
