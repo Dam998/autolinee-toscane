@@ -100,7 +100,7 @@ export default async function StopPage({ params: { stop } }: IProps) {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col sm:gap-5 gap-3">
       <h1 className="text-xl font-bold sm:text-center text-left">
         Fermata: {stopName || stop}
         <br />
@@ -109,8 +109,8 @@ export default async function StopPage({ params: { stop } }: IProps) {
       <table className="w-full text-left border dark:border-gray-500 border-gray-200 rounded-2xl overflow-hidden">
         <thead>
           <tr className="dark:bg-gray-500 bg-gray-200">
-            <th className="py-3 ps-5">LINEA</th>
-            <th className="py-3 ps-5" colSpan={2}>
+            <th className="py-3 sm:ps-5 ps-3">LINEA</th>
+            <th className="py-3 sm:ps-5 ps-3" colSpan={2}>
               DESTINAZIONE
             </th>
           </tr>
@@ -126,8 +126,8 @@ export default async function StopPage({ params: { stop } }: IProps) {
                 key={name}
                 className="border-t-2 first:border-none dark:border-gray-500 border-gray-200"
               >
-                <td className="py-3 ps-5 font-bold">{name}</td>
-                <td className="ps-5 font-bold" colSpan={2}>
+                <td className="py-3 sm:ps-5 ps-3 font-bold">{name}</td>
+                <td className="sm:ps-5 ps-3 font-bold" colSpan={2}>
                   <table className="w-full">
                     <tbody>
                       {destinations.map(({ name: destName, times }) => {
@@ -137,14 +137,14 @@ export default async function StopPage({ params: { stop } }: IProps) {
                             key={destName}
                           >
                             <td className="py-2">{destName}</td>
-                            <td className="flex flex-col items-end py-2 pe-5">
+                            <td className="flex flex-col items-end py-2 sm:pe-5 pe-3">
                               {times.map(({ realTime, time }) => {
                                 return (
                                   <span
                                     key={time}
                                     className={
                                       realTime
-                                        ? "dark:text-green-400 text-green-600"
+                                        ? "dark:text-green-400 text-green-600 whitespace-nowrap"
                                         : ""
                                     }
                                   >
@@ -159,20 +159,6 @@ export default async function StopPage({ params: { stop } }: IProps) {
                     </tbody>
                   </table>
                 </td>
-                {/* <td className="py-3 ps-5 font-bold">
-                  <div className="flex flex-col">
-                    {times.map(({ realTime, time }) => {
-                      return (
-                        <span
-                          key={time}
-                          className={realTime ? "text-green-400" : ""}
-                        >
-                          {formatDepartureTime(time)}
-                        </span>
-                      );
-                    })}
-                  </div>
-                </td> */}
               </tr>
             );
           })}
