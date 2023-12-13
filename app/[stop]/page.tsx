@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getRouteInfo, getStopTimes } from "../api/stop";
 
 interface IProps {
@@ -11,8 +12,13 @@ export default async function StopPage({ params: { stop } }: IProps) {
 
   if (!stopTimes.items || Object.values(stopTimes.items).length === 0) {
     return (
-      <div className="p-4">
-        <h1 className="text-2xl font-bold text-center">Fermata non trovata</h1>
+      <div className="flex flex-col gap-4 text-center items-center font-bold">
+        <h1 className="text-2xl">Fermata non trovata</h1>
+        <Link href="/">
+          <div className="px-4 py-2 w-fit rounded-2xl border">
+            {"<- Indietro"}
+          </div>
+        </Link>
       </div>
     );
   }
@@ -35,7 +41,7 @@ export default async function StopPage({ params: { stop } }: IProps) {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-4">
       <h1 className="text-xl font-bold text-center">
         Fermata: {stopName || stop}
         <br />
