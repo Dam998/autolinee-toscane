@@ -109,9 +109,10 @@ export default async function StopPage({ params: { stop } }: IProps) {
       <table className="w-full text-left border dark:border-gray-500 border-gray-200 rounded-2xl overflow-hidden">
         <thead>
           <tr className="dark:bg-gray-500 bg-gray-200">
-            <th className="py-3 px-5">LINEA</th>
-            <th className="py-3 px-5">DESTINAZIONE</th>
-            <th className="py-3 px-5">ORARI</th>
+            <th className="py-3 ps-5">LINEA</th>
+            <th className="py-3 ps-5" colSpan={2}>
+              DESTINAZIONE
+            </th>
           </tr>
         </thead>
         <tbody className="dark:bg-black bg-zinc-50">
@@ -123,36 +124,40 @@ export default async function StopPage({ params: { stop } }: IProps) {
             return (
               <tr
                 key={name}
-                className="border-t dark:border-gray-500 border-gray-200"
+                className="border-t-2 first:border-none dark:border-gray-500 border-gray-200"
               >
-                <td className="py-3 px-5 font-bold">{name}</td>
-                <td className="py-3 px-5 font-bold" colSpan={2}>
-                  {destinations.map(({ name: destName, times }) => {
-                    return (
-                      <div
-                        key={destName}
-                        className="flex gap-2 justify-between items-center border-b last:border-none dark:border-gray-500 border-gray-200"
-                      >
-                        <div>{destName}</div>
-                        <div className="flex flex-col items-end">
-                          {times.map(({ realTime, time }) => {
-                            return (
-                              <span
-                                key={time}
-                                className={
-                                  realTime
-                                    ? "dark:text-green-400 text-green-600"
-                                    : ""
-                                }
-                              >
-                                {formatDepartureTime(time)}
-                              </span>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
+                <td className="py-3 ps-5 font-bold">{name}</td>
+                <td className="ps-5 font-bold" colSpan={2}>
+                  <table className="w-full">
+                    <tbody>
+                      {destinations.map(({ name: destName, times }) => {
+                        return (
+                          <tr
+                            className="border-b-2 last:border-none dark:border-gray-500 border-gray-200"
+                            key={destName}
+                          >
+                            <td className="py-2">{destName}</td>
+                            <td className="flex flex-col items-end py-2 pe-5">
+                              {times.map(({ realTime, time }) => {
+                                return (
+                                  <span
+                                    key={time}
+                                    className={
+                                      realTime
+                                        ? "dark:text-green-400 text-green-600"
+                                        : ""
+                                    }
+                                  >
+                                    {formatDepartureTime(time)}
+                                  </span>
+                                );
+                              })}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
                 </td>
                 {/* <td className="py-3 ps-5 font-bold">
                   <div className="flex flex-col">
