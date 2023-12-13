@@ -43,7 +43,7 @@ export default async function StopPage({ params: { stop } }: IProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-xl font-bold text-center sm:text-left">
+      <h1 className="text-xl font-bold sm:text-center text-left">
         Fermata: {stopName || stop}
         <br />
         Ultimo aggiornamento: {stopTimes?.infos?.results_date_time}
