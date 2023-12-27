@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { getRouteInfo, getStopTimes, getStops } from "../api/stop";
-import dayjs from "dayjs";
+import { getStops } from "../api/stop";
 
 interface IProps {
   params: {
@@ -9,7 +8,6 @@ interface IProps {
 }
 
 export default async function StopPage({ params: { stop } }: IProps) {
-  // const stopTimes = await getStopTimes(stop);
   const stopTimes = await getStops(stop);
 
   if (!stopTimes.stopAreas || Object.values(stopTimes.stopAreas).length === 0) {
@@ -72,23 +70,6 @@ export default async function StopPage({ params: { stop } }: IProps) {
     });
   });
 
-  // const routeId = Object.values(stopTimes.items)[0]?.RouteId;
-  // const routeInfo = await getRouteInfo(routeId);
-
-  // let stopName = "";
-  // if (!!routeInfo?.directions) {
-  //   for (const dir of routeInfo?.directions) {
-  //     if (!dir.stopPoints) continue;
-
-  //     for (const sp of dir.stopPoints) {
-  //       if (sp.id === `AUTOLINEE:${stop}`) {
-  //         stopName = sp.name;
-  //         break;
-  //       }
-  //     }
-  //   }
-  // }
-
   const formatDepartureTime = (time: number) => {
     const minutes = Math.trunc(time / 60);
 
@@ -104,7 +85,6 @@ export default async function StopPage({ params: { stop } }: IProps) {
       <h1 className="text-xl font-bold sm:text-center text-left">
         Fermata: {stopName || stop}
         <br />
-        {/* Ultimo aggiornamento: {stopTimes?.infos?.results_date_time} */}
       </h1>
       <table className="w-full text-left border dark:border-gray-500 border-gray-200 rounded-2xl overflow-hidden">
         <thead>
@@ -117,10 +97,6 @@ export default async function StopPage({ params: { stop } }: IProps) {
         </thead>
         <tbody className="dark:bg-black bg-zinc-50">
           {Object.values(toDisplay).map(({ destinations, name }) => {
-            // if (Schedule.length === 0) return null;
-
-            // const { to_stop_name } = Schedule[0];
-
             return (
               <tr
                 key={name}
@@ -156,36 +132,6 @@ export default async function StopPage({ params: { stop } }: IProps) {
                       </div>
                     );
                   })}
-                  {/* <table className="w-full">
-                    <tbody>
-                      {destinations.map(({ name: destName, times }) => {
-                        return (
-                          <tr
-                            className="border-b-2 last:border-none dark:border-gray-500 border-gray-200"
-                            key={destName}
-                          >
-                            <td className="py-2">{destName}</td>
-                            <td className="flex flex-col items-end py-2 sm:pe-5 pe-3">
-                              {times.map(({ realTime, time }) => {
-                                return (
-                                  <span
-                                    key={time}
-                                    className={
-                                      realTime
-                                        ? "dark:text-green-400 text-green-600 whitespace-nowrap"
-                                        : ""
-                                    }
-                                  >
-                                    {formatDepartureTime(time)}
-                                  </span>
-                                );
-                              })}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table> */}
                 </td>
               </tr>
             );
